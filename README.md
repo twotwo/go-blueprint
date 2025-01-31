@@ -1,10 +1,25 @@
 # Project rest_api
 
-One Paragraph of project description goes here
+用 [go-blueprint](github.com/melkeydev/go-blueprint) 构建的 RESTful API.
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+### 添加环境变量
+
+```bash
+$ cat .env
+PORT=8080
+BLUEPRINT_DB_HOST=psql_bp
+BLUEPRINT_DB_PORT=5432
+BLUEPRINT_DB_DATABASE=blueprint
+BLUEPRINT_DB_USERNAME=melkey
+BLUEPRINT_DB_PASSWORD=password1234
+BLUEPRINT_DB_SCHEMA=web
+```
+
+### 安装依赖
+
+`go mod tidy`
 
 ## MakeFile
 
