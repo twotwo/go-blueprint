@@ -21,48 +21,28 @@ BLUEPRINT_DB_SCHEMA=web
 
 `go mod tidy`
 
-## MakeFile
+### 运行
 
-Run build make command with tests
-```bash
-make all
-```
+`make run`
 
-Build the application
-```bash
-make build
-```
+## 第三方插件
 
-Run the application
+### swaggo/swag
+
+<https://github.com/swaggo/swag>
+
+与 chi 集成 [swaggo/http-swagger/v2](https://github.com/swaggo/http-swagger/)
+
+按照 [Declarative Comments Format](https://github.com/swaggo/swag#declarative-comments-format) 在 API 代码中添加注释(internal/server/routes.go)
+
 ```bash
-make run
-```
-Create DB container
-```bash
-make docker-run
+go install github.com/swaggo/swag/cmd/swag@latest
+swag init -g internal/server/routes.go # 生成 docs，指定路由配置文件(默认是 main.go)
 ```
 
-Shutdown DB Container
-```bash
-make docker-down
-```
+[API操作](https://github.com/swaggo/swag/blob/master/README_zh-CN.md#api%E6%93%8D%E4%BD%9C) 重要注释
 
-DB Integrations Test:
-```bash
-make itest
-```
-
-Live reload the application:
-```bash
-make watch
-```
-
-Run the test suite:
-```bash
-make test
-```
-
-Clean up binary from the last build:
-```bash
-make clean
-```
+- `description` 操作行为的详细说明。
+- `summary` 该操作的简短摘要
+- `tags` 每个API操作的标签列表，以逗号分隔
+- `router` 以空格分隔的路径定义。 `path,[httpMethod]`
