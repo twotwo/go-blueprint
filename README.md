@@ -2,6 +2,10 @@
 
 用 [go-blueprint](github.com/melkeydev/go-blueprint) 构建的 RESTful API.
 
+## VSCode
+
+对 Go 插件来说，GOROOT 环境变量还是必须的
+
 ## Getting Started
 
 ### 添加环境变量
@@ -25,7 +29,13 @@ BLUEPRINT_DB_SCHEMA=web
 
 `make run`
 
-## 第三方插件
+## 单元测试
+
+### 接口测试
+
+[testing chi](https://go-chi.io/#/pages/testing) 基于 chi 的路由
+
+## API 文档
 
 ### swaggo/swag
 
