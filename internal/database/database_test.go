@@ -4,10 +4,32 @@ import (
 	"os"
 	"testing"
 
+	"github.com/joho/godotenv"
 	_ "github.com/joho/godotenv/autoload"
 )
 
+const env_file = "../../.env"
+
+func checkEnvFile(t *testing.T) {
+	if _, err := os.Stat(env_file); os.IsNotExist(err) {
+		t.Skip(".env file not found, skipping test")
+	}
+}
+
+func TestEnv(t *testing.T) {
+	checkEnvFile(t)
+	// load env vars
+	godotenv.Load(env_file)
+	got := os.Getenv("BLUEPRINT_DB_HOST")
+	if got != "psql_bp" {
+		t.Errorf("Expected BLUEPRINT_DB_HOST=psql_bp, got %s", got)
+	}
+}
+
 func TestDatabaseConfig(t *testing.T) {
+	checkEnvFile(t)
+	// load env vars
+	godotenv.Load(env_file)
 	tests := []struct {
 		name     string
 		envVar   string

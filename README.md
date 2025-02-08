@@ -33,7 +33,7 @@ BLUEPRINT_DB_SCHEMA=web
 
 ### 接口测试
 
-[testing chi](https://go-chi.io/#/pages/testing) 基于 chi 的路由
+[testing chi](https://go-chi.io/#/pages/testing) chi 路由测试
 
 ## API 文档
 
