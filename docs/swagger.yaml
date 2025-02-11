@@ -1,0 +1,30 @@
+info:
+  contact: {}
+paths:
+  /:
+    get:
+      description: 返回 "Hello World" 字符串
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              type: string
+            type: array
+      summary: Say Hello World
+      tags:
+      - example
+  /health:
+    get:
+      description: 返回一个 json 格式的数据库健康检查信息
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              type: string
+            type: array
+      summary: 返回数据库健康检查
+      tags:
+      - example
+swagger: "2.0"

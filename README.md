@@ -43,11 +43,11 @@ BLUEPRINT_DB_SCHEMA=web
 
 与 chi 集成 [swaggo/http-swagger/v2](https://github.com/swaggo/http-swagger/)
 
-按照 [Declarative Comments Format](https://github.com/swaggo/swag#declarative-comments-format) 在 API 代码中添加注释(internal/server/routes.go)
+按照 [Declarative Comments Format](https://github.com/swaggo/swag#declarative-comments-format) 在 API 代码中添加注释(app/server/routes.go)
 
 ```bash
 go install github.com/swaggo/swag/cmd/swag@latest
-swag init -g internal/server/routes.go # 生成 docs，指定路由配置文件(默认是 main.go)
+swag init -g app/server/routes.go # 生成 docs，指定路由配置文件(默认是 main.go)
 ```
 
 [API操作](https://github.com/swaggo/swag/blob/master/README_zh-CN.md#api%E6%93%8D%E4%BD%9C) 重要注释
