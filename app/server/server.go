@@ -3,13 +3,12 @@ package server
 import (
 	"fmt"
 	"net/http"
-	"os"
-	"strconv"
 	"time"
 
 	_ "github.com/joho/godotenv/autoload"
 
 	"rest_api/app/database"
+	"rest_api/app/utils"
 )
 
 type Server struct {
@@ -18,12 +17,12 @@ type Server struct {
 }
 
 func NewServer() *http.Server {
-	port, _ := strconv.Atoi(os.Getenv("PORT"))
-	if port == 0 {
-		port = 8080
+	cfg, err := utils.GetConfigInstance()
+	if err != nil {
+		panic(err)
 	}
 	NewServer := &Server{
-		port: port,
+		port: cfg.ServicePort,
 		db:   database.New(),
 	}
 
