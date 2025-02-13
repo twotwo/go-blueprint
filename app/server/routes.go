@@ -10,12 +10,14 @@ import (
 	"github.com/go-chi/cors"
 
 	_ "rest_api/docs"
+
 	httpSwagger "github.com/swaggo/http-swagger/v2"
 )
 
 func (s *Server) RegisterRoutes() http.Handler {
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
+	r.Use(s.auth)
 
 	r.Use(cors.Handler(cors.Options{
 		AllowedOrigins:   []string{"https://*", "http://*"},
@@ -31,7 +33,6 @@ func (s *Server) RegisterRoutes() http.Handler {
 
 	r.Get("/", s.HelloWorldHandler)
 	r.Get("/health", s.healthHandler)
-
 
 	return r
 }

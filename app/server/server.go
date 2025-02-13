@@ -13,6 +13,7 @@ import (
 
 type Server struct {
 	port int
+	auth func(next http.Handler) http.Handler
 	db   database.Service
 }
 
@@ -23,6 +24,7 @@ func NewServer() *http.Server {
 	}
 	NewServer := &Server{
 		port: cfg.ServicePort,
+		auth: BasicAuth("example", map[string]string{"admin": "admin"}),
 		db:   database.New(),
 	}
 
