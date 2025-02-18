@@ -1,4 +1,4 @@
-module rest_api
+module github.com/twotwo/go-blueprint
 
 go 1.22
 

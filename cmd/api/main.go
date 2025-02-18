@@ -9,7 +9,7 @@ import (
 	"syscall"
 	"time"
 
-	"rest_api/app/server"
+	"github.com/twotwo/go-blueprint/app/server"
 )
 
 func gracefulShutdown(apiServer *http.Server, done chan bool) {

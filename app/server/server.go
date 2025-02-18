@@ -7,8 +7,8 @@ import (
 
 	_ "github.com/joho/godotenv/autoload"
 
-	"rest_api/app/database"
-	"rest_api/app/utils"
+	"github.com/twotwo/go-blueprint/app/database"
+	"github.com/twotwo/go-blueprint/app/utils"
 )
 
 type Server struct {

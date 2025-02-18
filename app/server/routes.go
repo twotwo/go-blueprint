@@ -9,7 +9,7 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
 
-	_ "rest_api/docs"
+	_ "github.com/twotwo/go-blueprint/docs"
 
 	httpSwagger "github.com/swaggo/http-swagger/v2"
 )
