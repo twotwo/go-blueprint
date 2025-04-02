@@ -14,6 +14,12 @@ import (
 	httpSwagger "github.com/swaggo/http-swagger/v2"
 )
 
+// RegisterRoutes 注册服务器的路由、中间件及 API 挂载
+// @title           Swagger API
+// @version         1.0
+// @host      		localhost
+// @BasePath        /
+// @description     This is a sample server for RESTful API.
 func (s *Server) RegisterRoutes() http.Handler {
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)

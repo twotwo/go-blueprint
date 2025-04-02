@@ -48,6 +48,8 @@ BLUEPRINT_DB_SCHEMA=web
 ```bash
 go install github.com/swaggo/swag/cmd/swag@latest
 swag init -g app/server/routes.go # 生成 docs，指定路由配置文件(默认是 main.go)
+go install github.com/go-swagger/go-swagger/cmd/swagger@latest
+swagger serve -F=swagger docs/swagger.yaml # 启动 spec 服务
 ```
 
 [API操作](https://github.com/swaggo/swag/blob/master/README_zh-CN.md#api%E6%93%8D%E4%BD%9C) 重要注释
