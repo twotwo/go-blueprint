@@ -19,7 +19,12 @@ jobs:
       - name: Build
         run: go build -v ./...
 
-      - name: Test with the Go CLI
+      - name: Run go test
+        id: test
+        run: go test ./... || echo "GO_TEST_FAILED=true" >> $GITHUB_ENV
+      - name: Test output verbose
+        if: env.GO_TEST_FAILED == 'true'
         run: |
-          go mod tidy
-          go test ./... -v -tags skipbase
+          go clean -testcache
+          go test ./... -v
+          # go test ./... -v -tags skipbase
