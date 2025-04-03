@@ -3,24 +3,28 @@ package server
 import (
 	"fmt"
 	"net/http"
-	"os"
-	"strconv"
 	"time"
 
 	_ "github.com/joho/godotenv/autoload"
 
-	"rest_api/internal/database"
+	"github.com/twotwo/go-blueprint/app/database"
+	"github.com/twotwo/go-blueprint/app/utils"
 )
 
 type Server struct {
 	port int
+	auth func(next http.Handler) http.Handler
 	db   database.Service
 }
 
 func NewServer() *http.Server {
-	port, _ := strconv.Atoi(os.Getenv("PORT"))
+	cfg, err := utils.GetConfigInstance()
+	if err != nil {
+		panic(err)
+	}
 	NewServer := &Server{
-		port: port,
+		port: cfg.ServicePort,
+		auth: BasicAuth("example", map[string]string{"admin": "admin"}),
 		db:   database.New(),
 	}
 

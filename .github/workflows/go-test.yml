@@ -1,18 +1,30 @@
 name: Go-test
 on: [push, pull_request]
 
+env:
+  CI: GITHUB # Set CI to GITHUB to enable CI-specific behavior in the code
+
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
+
       - name: Setup Go
         uses: actions/setup-go@v4
         with:
-          go-version: '1.22.x'
+          go-version: "1.23.x"
 
       - name: Build
         run: go build -v ./...
-      - name: Test with the Go CLI
-        run: go test ./... 
+
+      - name: Run go test
+        id: test
+        run: go test ./... || echo "GO_TEST_FAILED=true" >> $GITHUB_ENV
+      - name: Test output verbose
+        if: env.GO_TEST_FAILED == 'true'
+        run: |
+          go clean -testcache
+          go test ./... -v
+          # go test ./... -v -tags skipbase

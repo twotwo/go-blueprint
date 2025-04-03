@@ -1,53 +1,60 @@
 # Project rest_api
 
-One Paragraph of project description goes here
+用 [go-blueprint](github.com/melkeydev/go-blueprint) 构建的 RESTful API.
+
+## VSCode
+
+对 Go 插件来说，GOROOT 环境变量还是必须的
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+### 添加环境变量
 
-## MakeFile
-
-Run build make command with tests
 ```bash
-make all
+$ cat .env
+PORT=8080
+BLUEPRINT_DB_HOST=psql_bp
+BLUEPRINT_DB_PORT=5432
+BLUEPRINT_DB_DATABASE=blueprint
+BLUEPRINT_DB_USERNAME=melkey
+BLUEPRINT_DB_PASSWORD=password1234
+BLUEPRINT_DB_SCHEMA=web
 ```
 
-Build the application
+### 安装依赖
+
+`go mod tidy`
+
+### 运行
+
+`make run`
+
+## 单元测试
+
+### 接口测试
+
+[testing chi](https://go-chi.io/#/pages/testing) chi 路由测试
+
+## API 文档
+
+### swaggo/swag
+
+<https://github.com/swaggo/swag>
+
+与 chi 集成 [swaggo/http-swagger/v2](https://github.com/swaggo/http-swagger/)
+
+按照 [Declarative Comments Format](https://github.com/swaggo/swag#declarative-comments-format) 在 API 代码中添加注释(app/server/routes.go)
+
 ```bash
-make build
+go install github.com/swaggo/swag/cmd/swag@latest
+swag init -g app/server/routes.go # 生成 docs，指定路由配置文件(默认是 main.go)
+go install github.com/go-swagger/go-swagger/cmd/swagger@latest
+swagger serve -F=swagger docs/swagger.yaml # 启动 spec 服务
 ```
 
-Run the application
-```bash
-make run
-```
-Create DB container
-```bash
-make docker-run
-```
+[API操作](https://github.com/swaggo/swag/blob/master/README_zh-CN.md#api%E6%93%8D%E4%BD%9C) 重要注释
 
-Shutdown DB Container
-```bash
-make docker-down
-```
-
-DB Integrations Test:
-```bash
-make itest
-```
-
-Live reload the application:
-```bash
-make watch
-```
-
-Run the test suite:
-```bash
-make test
-```
-
-Clean up binary from the last build:
-```bash
-make clean
-```
+- `description` 操作行为的详细说明。
+- `summary` 该操作的简短摘要
+- `tags` 每个API操作的标签列表，以逗号分隔
+- `router` 以空格分隔的路径定义。 `path,[httpMethod]`

@@ -1,57 +1,27 @@
 package main
 
 import (
-	"context"
-	"fmt"
 	"log"
 	"net/http"
-	"os/signal"
-	"syscall"
-	"time"
 
-	"rest_api/internal/server"
+	"github.com/go-chi/chi/v5"
+	"github.com/twotwo/go-blueprint/app/api"
 )
 
-func gracefulShutdown(apiServer *http.Server, done chan bool) {
-	// Create context that listens for the interrupt signal from the OS.
-	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
-	defer stop()
-
-	// Listen for the interrupt signal.
-	<-ctx.Done()
-
-	log.Println("shutting down gracefully, press Ctrl+C again to force")
-
-	// The context is used to inform the server it has 5 seconds to finish
-	// the request it is currently handling
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
-	if err := apiServer.Shutdown(ctx); err != nil {
-		log.Printf("Server forced to shutdown with error: %v", err)
-	}
-
-	log.Println("Server exiting")
-
-	// Notify the main goroutine that the shutdown is complete
-	done <- true
-}
-
 func main() {
+	// create a type that satisfies the `api.ServerInterface`, which contains an implementation of every operation from the generated code
+	server := api.NewServer()
 
-	server := server.NewServer()
+	r := chi.NewMux()
 
-	// Create a done channel to signal when the shutdown is complete
-	done := make(chan bool, 1)
+	// get an `http.Handler` that we can use
+	h := api.HandlerFromMux(server, r)
 
-	// Run graceful shutdown in a separate goroutine
-	go gracefulShutdown(server, done)
-
-	err := server.ListenAndServe()
-	if err != nil && err != http.ErrServerClosed {
-		panic(fmt.Sprintf("http server error: %s", err))
+	s := &http.Server{
+		Handler: h,
+		Addr:    "0.0.0.0:8080",
 	}
 
-	// Wait for the graceful shutdown to complete
-	<-done
-	log.Println("Graceful shutdown complete.")
+	// And we serve HTTP until the world ends.
+	log.Fatal(s.ListenAndServe())
 }
