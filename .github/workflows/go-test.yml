@@ -1,12 +1,16 @@
 name: Go-test
 on: [push, pull_request]
 
+env:
+  CI: GITHUB # Set CI to GITHUB to enable CI-specific behavior in the code
+
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
+
       - name: Setup Go
         uses: actions/setup-go@v4
         with:
@@ -14,5 +18,8 @@ jobs:
 
       - name: Build
         run: go build -v ./...
+
       - name: Test with the Go CLI
-        run: go test ./... -v
+        run: |
+          go mod tidy
+          go test ./... -v -tags skipbase

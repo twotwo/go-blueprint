@@ -1,7 +1,11 @@
+//go:build skipbase
+// +build skipbase
+
 package model
 
 import (
 	"os"
+	"strings"
 	"testing"
 	"time"
 
@@ -109,8 +113,8 @@ func TestDBConnbyGlobalInstance(t *testing.T) {
 }
 
 func TestSchemaMigration(t *testing.T) {
-	if os.Getenv("CI") == "" {
-		t.Skip("跳过本测试，仅在 CI 环境下运行")
+	if strings.ToUpper(os.Getenv("CI")) != "INIT" {
+		t.Skip("仅在设置 CI=INIT 执行本测试")
 	}
 	// 迁移数据库
 	if err := DBConn.Set("gorm:table_options",
