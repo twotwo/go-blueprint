@@ -16,6 +16,20 @@ github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen
 v2.4.1
 ```
 
+### For Go 1.24+
+
+建议遵循 Go 1.24+ 中提供的 [go tool](https://www.jvt.me/posts/2025/01/27/go-tools-124/) 支持来管理 `oapi-codegen` 与核心应用程序的依赖关系。
+
+```bash
+$ go get -tool github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@latest
+# this will then modify your `go.mod`
+$ cat docs/oapi-codegen.go # 1.24 内置了对运行 tool 的缓存
+//go:generate go tool oapi-codegen -config oapi-codegen.yaml ../api.yaml
+$ go generate -x ./docs/...
+# 等价于以下命令
+$ cd docs && go tool oapi-codegen -config oapi-codegen.yaml ../api.yaml && cd -
+```
+
 ## Generate code
 
 [Spec 生成 Chi 代码](https://github.com/oapi-codegen/oapi-codegen?tab=readme-ov-file#chi)
