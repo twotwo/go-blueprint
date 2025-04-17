@@ -11,7 +11,9 @@ build:
 
 # Run the application
 run:
-	@go run cmd/api/main.go
+	export DB_TYPE=sqlite  # 或 mysql, postgres
+	export DB_FILE=blueprint.db  # 对于 SQLite
+	@go run cmd/server/main.go
 # Create DB container
 docker-run:
 	@if docker compose up --build 2>/dev/null; then \

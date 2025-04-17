@@ -1,6 +1,25 @@
 # Project rest_api
 
-用 [go-blueprint](github.com/melkeydev/go-blueprint) 构建的 RESTful API.
+~~用 [go-blueprint](github.com/melkeydev/go-blueprint) 构建的 RESTful API.~~
+
+一个 RESTful API 服务底座，可以快速嵌入新的 Resource 接口。
+
+采用 `chi` 做路由管理，目录结构如下
+
+```bash
+./go-blueprint
+├── cmd
+│   └── server           # 应用程序入口点
+├── deploy
+├── docs
+├── pkg                  # 通用功能包
+│   ├── errors
+│   └── variables
+└── server               # Resources of API
+    ├── user
+    └── message
+
+```
 
 ## VSCode
 
@@ -8,18 +27,14 @@
 
 ## Getting Started
 
-### 添加环境变量
+### 如何添加新资源
 
-```bash
-$ cat .env
-PORT=8080
-BLUEPRINT_DB_HOST=psql_bp
-BLUEPRINT_DB_PORT=5432
-BLUEPRINT_DB_DATABASE=blueprint
-BLUEPRINT_DB_USERNAME=melkey
-BLUEPRINT_DB_PASSWORD=password1234
-BLUEPRINT_DB_SCHEMA=web
-```
+要添加新的资源接口，可以参照 `user` 和 `message` 资源的实现模式：
+
+1. 在 server 目录下创建新的资源目录，例如 product
+2. 在该目录下创建 routes.go 和 handlers.go 文件
+3. 实现资源的路由注册和处理函数
+4. 在 server/routes.go 中导入新模块并注册新资源的路由
 
 ### 安装依赖
 
@@ -37,7 +52,7 @@ BLUEPRINT_DB_SCHEMA=web
 
 ## API 文档
 
-### swaggo/swag
+### ~~swaggo/swag~~ 仅支持 OpenAPI v2
 
 <https://github.com/swaggo/swag>
 
