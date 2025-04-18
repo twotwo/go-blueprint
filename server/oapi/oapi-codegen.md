@@ -23,9 +23,11 @@ v2.4.1
 ```bash
 $ go get -tool github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@latest
 # this will then modify your `go.mod`
-$ cat docs/oapi-codegen.go # 1.24 内置了对运行 tool 的缓存
-//go:generate go tool oapi-codegen -config oapi-codegen.yaml ../api.yaml
-$ go generate -x ./docs/...
+$ cat server/oapi/generate.go # 1.24 内置了对运行 tool 的缓存
+package oapi
+
+//go:generate go tool oapi-codegen -config cfg.yaml api.yaml
+$ go generate -x ./...
 # 等价于以下命令
 $ cd docs && go tool oapi-codegen -config oapi-codegen.yaml ../api.yaml && cd -
 ```
@@ -34,9 +36,20 @@ $ cd docs && go tool oapi-codegen -config oapi-codegen.yaml ../api.yaml && cd -
 
 [Spec 生成 Chi 代码](https://github.com/oapi-codegen/oapi-codegen?tab=readme-ov-file#chi)
 
+<https://github.com/oapi-codegen/oapi-codegen/tree/main/examples/minimal-server>
+
+- chi/
+- api.yaml
+
 ```bash
 # generate chi server code
-$ cd app/api && oapi-codegen --config=config.yaml ../../api.yaml && cd -
+$ go generate -x ./...
 # start server
-$ go run cmd/api/main.go
+$ go run cmd/oapi/main.go
 ```
+
+## 访问服务接口
+
+1. VSCode 安装 [vscode-openapi-viewer](https://marketplace.visualstudio.com/items?itemName=AndrewButson.vscode-openapi-viewer) 扩展
+2. 打开 api.yaml 后右上出现绿色靶子图标
+3. 点击后可以预览 API 并发送请求

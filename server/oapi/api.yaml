@@ -2,6 +2,8 @@ openapi: 3.0.4
 info:
   version: 1.0.0
   title: Minimal ping API server
+servers:
+  - url: http://localhost:8080/
 paths:
   /ping:
     get:
