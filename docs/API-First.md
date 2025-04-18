@@ -22,37 +22,7 @@ API 优先（API-First）是一种以 API 设计为核心的开发理念，强�
 
 ## 实施工具推荐
 
-1. **Apifox** 2025年首选工具，覆盖API全生命周期，支持智能文档生成和实时协作（免费版满足初创团队需求）。
-2. **Swagger Editor** 通过 YAML 编写 OpenAPI 规范，自动生成交互式文档和客户端 SDK。
-3. **Mockoon** 支持 OpenAPI v3 Spec 的导入导出，启动 mock server。
-4. **oapi-codegen** 一个命令行工具，能够将 OpenAPI 规范转换为 Go 代码
-
-### oapi-codegen
-
-<https://github.com/oapi-codegen/oapi-codegen>
-
-支持 OpenAPI v3，支持生成多种服务器端代码 [Supported Servers](https://github.com/oapi-codegen/oapi-codegen?tab=readme-ov-file#generating-server-side-boilerplate)
-
-```bash
-# for the binary install
-$ go install github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@latest
-$ oapi-codegen -version
-github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen
-v2.4.1
-```
-
-[Spec 生成 Chi 代码](https://github.com/oapi-codegen/oapi-codegen?tab=readme-ov-file#chi)
-
-```bash
-# generate chi server code
-$ cd app/api && oapi-codegen --config=config.yaml ../../api.yaml && cd -
-# start server
-$ go run cmd/api/main.go
-```
-
-`$ oapi-codegen --generate chi-server -o petstore.gen.go -package petstore api/swagger.yaml`
-
-- `--generate chi-server`：​指定生成 `chi` 路由器的服务端代码
-- `-o petstore.gen.go`：​指定输出文件名
-- `-package petstore`：​指定生成代码的包名。​
-- `swagger.yaml`：​您的 OpenAPI 规范文件。
+1. **Swagger Editor** 通过 YAML 编写 OpenAPI 规范，自动生成交互式文档和客户端 SDK
+2. **Mockoon** 支持 OpenAPI v3 Spec 的导入导出，启动 mock server
+3. **oapi-codegen** 一个命令行工具，能够将 OpenAPI 规范转换为 Go 代码，见 [docs/oapi-codegen.md](./docs/oapi-codegen.md)
+4. **Apifox** 2025年首选工具，覆盖 API 全生命周期，支持智能文档生成和实时协作（免费版满足初创团队需求）

@@ -1,4 +1,4 @@
-package api
+package oapi
 
 import (
 	"encoding/json"

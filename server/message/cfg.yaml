@@ -1,0 +1,4 @@
+package: message
+output: gen_types.go
+generate:
+  models: true

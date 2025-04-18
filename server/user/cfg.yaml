@@ -1,0 +1,4 @@
+package: user
+output: gen_types.go
+generate:
+  models: true

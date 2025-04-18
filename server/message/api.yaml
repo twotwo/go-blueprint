@@ -1,0 +1,281 @@
+openapi: 3.0.4
+info:
+  title: 消息管理聚合根
+  description: |-
+    消息配置管理相关接口：
+    - 配置的增删改查(暂无)
+    - 消息的下发与查看(短信/广播/站内信)
+
+  version: 1.0.0
+externalDocs:
+  description: OpenAPI 3.0
+  url: https://swagger.io/docs/specification/v3_0/basic-structure/
+servers:
+  - url: http://localhost:8080/api/v1
+  - url: http://localhost/api/v1
+tags:
+  - name: message
+    description: Operations about message
+paths:
+  /auth/login:
+    post:
+      summary: 用户登录
+      description: 用户登录接口
+      operationId: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: twotwo
+                password:
+                  type: string
+                  example: "123456"
+      responses:
+        "200":
+          description: 登录成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Invalid credentials
+  /message:
+    post:
+      tags:
+        - message
+      security:
+        - MySecurity: []
+      summary: 发消息(短信/站内/广播)
+      description: Creates a new broadcast message
+      operationId: createBroadcastMessage
+      requestBody:
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: "#/components/schemas/SMSMessage"
+                - $ref: "#/components/schemas/SiteMessage"
+                - $ref: "#/components/schemas/BroadcastMessage"
+      responses:
+        "201":
+          description: Broadcast message created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Message"
+        "400":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Invalid input
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Internal server error
+  /message/sms/{number}:
+    get:
+      tags:
+        - message
+      summary: 根据手机号查询消息
+      description: Returns a list of messages filtered by number
+      operationId: findMessagesByNumber
+      parameters:
+        - name: number
+          in: path
+          description: 短消息的目的手机号
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: A list of messages filtered by number.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageListResponse"
+        "400":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Invalid input
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Internal server error
+  /message/sitemessage/{uid}:
+    get:
+      tags:
+        - message
+      summary: 根据UID查询站内消息
+      description: Returns a list of messages filtered by UID
+      operationId: findMessagesByUID
+      parameters:
+        - name: uid
+          in: path
+          description: The UID to filter messages by
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: A list of messages filtered by UID.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageListResponse"
+        "400":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Invalid input
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Internal server error
+components:
+  schemas:
+    # 基础消息模型
+    Message:
+      type: object
+      required:
+        - id
+        - content
+        - type
+        - status
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 12345
+        content:
+          type: string
+          description: 消息内容
+          example: "验证码：929253，有效期10分钟。如非本人操作，请忽略。"
+        type:
+          $ref: "#/components/schemas/MessageType"
+        status:
+          $ref: "#/components/schemas/MessageStatus"
+
+    # 短信消息（扩展基础模型）
+    SMSMessage:
+      allOf:
+        - $ref: "#/components/schemas/Message"
+        - type: object
+          required:
+            - phone_number
+          properties:
+            phone_number:
+              type: string
+              description: 接收手机号
+              example: "+8613800138000"
+
+    # 站内消息（扩展基础模型）
+    SiteMessage:
+      allOf:
+        - $ref: "#/components/schemas/Message"
+        - type: object
+          required:
+            - user_id
+          properties:
+            user_id:
+              type: integer
+              format: int64
+              description: 接收用户ID
+              example: 1001
+
+    # 广播消息（扩展基础模型）
+    BroadcastMessage:
+      allOf:
+        - $ref: "#/components/schemas/Message"
+        - type: object
+          properties:
+            channel:
+              type: string
+              enum: [news, alert, promotion]
+              example: "news"
+
+    MessageListResponse:
+      type: object
+      properties:
+        messages:
+          type: array
+          items:
+            $ref: "#/components/schemas/Message"
+
+    # 消息状态枚举
+    MessageStatus:
+      type: string
+      enum:
+        - sending
+        - sent
+        - received
+        - read
+      # default: "sending"
+
+    # 消息类型枚举（用于类型区分）
+    MessageType:
+      type: string
+      enum:
+        - abstract
+        - sms
+        - sitemessage
+        - broadcast
+        - wechat
+      example: "sms"
+
+  securitySchemes:
+    MySecurity:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
